@@ -7,7 +7,11 @@
 
     //Получаем все города
     function getCities($iblockID){
-        $resEvents = CIBlockElement::GetList(array('timestamp_x' => 'desc'), array("IBLOCK_ID" => $iblockID, "ACTIVE" => "Y"), Array("NAME","CODE"));
+        $resEvents = CIBlockElement::GetList(
+        	array('timestamp_x' => 'desc'),
+        	array("IBLOCK_ID" => $iblockID, "ACTIVE" => "Y"), 
+        	array("NAME","CODE")
+        );
         while($arProperties = $resEvents->GetNext()){
             $cities[] = $arProperties;
         }
@@ -17,9 +21,13 @@
     //Отдает участников в заданном городе и в заданную дату
     function getParticipants($iblockID,$city,$date){
         $arFilter = array("IBLOCK_ID" => $iblockID, "ACTIVE"=>"Y", "PROPERTY_CITY.CODE" => $city, "PROPERTY_EVENT_DATE" => $date);
-        $resEvents = CIBlockElement::GetList(array('timestamp_x' => 'desc'), $arFilter, Array("PROPERTY_PARTICIPANTS"));
+        $resEvents = CIBlockElement::GetList(array('timestamp_x' => 'desc'), $arFilter, array("PROPERTY_PARTICIPANTS"));
         while($arProperties = $resEvents->GetNext()){
-            $resParticipants = CIBlockElement::GetList(array('timestamp_x' => 'desc'),Array("ID" => $arProperties['PROPERTY_PARTICIPANTS_VALUE']), Array("NAME"));
+            $resParticipants = CIBlockElement::GetList(
+            	array('timestamp_x' => 'desc'),
+            	array("ID" => $arProperties['PROPERTY_PARTICIPANTS_VALUE']), 
+            	array("NAME"),
+            );
             $arRes = $resParticipants->GetNext();
             $participants[]=$arRes['NAME'];   
         }
